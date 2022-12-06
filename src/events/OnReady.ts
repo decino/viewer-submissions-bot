@@ -1,8 +1,9 @@
 import {ArgsOf, Client, Discord, DIService, On} from "discordx";
 import {ActivityType, ChannelType, InteractionType} from "discord-api-types/v10";
-import {injectable} from "tsyringe";
+import {container, injectable} from "tsyringe";
 import logger from "../utils/LoggerFactory.js";
 import {ObjectUtil} from "../utils/Utils.js";
+import {BotServer} from "../api/BotServer.js";
 
 @Discord()
 @injectable()
@@ -20,6 +21,11 @@ export class OnReady {
         client.user.setActivity('Doom V', {type: ActivityType.Playing});
         await this.initAppCommands();
         this.initDi();
+        this.initWebServer();
+    }
+
+    private initWebServer(): void {
+        container.resolve(BotServer);
     }
 
     @On()

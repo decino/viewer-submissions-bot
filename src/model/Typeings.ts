@@ -1,6 +1,3 @@
-import DOOM_ENGINE from "../enums/DoomEngine.js";
-import GZDoomActions from "../enums/GZDoomActions.js";
-
 export namespace Typeings {
     export type propTypes = envTypes & packageJsonTypes
     export type envTypes = {
@@ -36,8 +33,6 @@ export namespace Typeings {
     export type SubmissionPayload = {
         wadName: string,
         wadLevel: string,
-        wadEngine: DOOM_ENGINE,
-        gzDoomActions?: GZDoomActions[],
         info?: string
     }
 

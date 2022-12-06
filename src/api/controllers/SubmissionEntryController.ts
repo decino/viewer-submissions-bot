@@ -1,12 +1,13 @@
 import {BaseController} from "./BaseController.js";
 import {Controller, Post} from "@overnightjs/core";
-import {container} from "tsyringe";
+import {container, singleton} from "tsyringe";
 import {SubmissionInfoDispatcher} from "../services/SubmissionInfoDispatcher.js";
 import {Typeings} from "../../model/Typeings.js";
 import {StatusCodes} from "http-status-codes";
 import type {Request, Response} from "express";
 import SubmissionPayload = Typeings.SubmissionPayload;
 
+@singleton()
 @Controller("bot")
 export class SubmissionEntryController extends BaseController {
 

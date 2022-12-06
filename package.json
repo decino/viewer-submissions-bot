@@ -13,7 +13,7 @@
     "lint": "eslint . --ext .ts --max-warnings 0",
     "lint-fix": "eslint . --ext .ts --fix",
     "start": "node build/Main.js",
-    "start_js": "npm run build & node build/Main.js",
+    "start_js": "node build/Main.js",
     "update_deps": "npx npm-check-updates"
   },
   "dependencies": {
