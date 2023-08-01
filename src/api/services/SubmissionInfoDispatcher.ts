@@ -18,9 +18,11 @@ export class SubmissionInfoDispatcher {
     public constructor(private _client: Client) {
     }
 
-    public postToChannel(payload: SubmissionPayload): Promise<Message | null> {
-        const guild = this._client.guilds.resolve(this.guildId);
-        const channelTOPostTo = guild.channels.resolve(this.channelToPostId);
+    public async postToChannel(payload: SubmissionPayload): Promise<Message | null> {
+        const guild = await this._client.guilds.fetch(this.guildId);
+        const channelTOPostTo = await guild.channels.fetch(this.channelToPostId, {
+            force: true
+        });
         const isText = channelTOPostTo.type === ChannelType.GuildText;
         if (!isText) {
             return null;
