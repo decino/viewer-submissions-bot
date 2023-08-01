@@ -47,7 +47,7 @@ export class BotServer extends Server {
         if (this._server) {
             return;
         }
-        const files = resolve(this.classesToLoad);
+        const files = await resolve(this.classesToLoad);
         const pArr = files.map((file) => import(file));
         const modules = await Promise.all(pArr);
         for (const module of modules) {
