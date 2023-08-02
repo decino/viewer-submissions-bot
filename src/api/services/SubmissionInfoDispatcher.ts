@@ -3,7 +3,7 @@ import {Property} from "../../model/framework/decorators/Property.js";
 import {Typeings} from "../../model/Typeings.js";
 import {Client} from "discordx";
 import {ChannelType} from "discord-api-types/v10";
-import {EmbedBuilder, GuildMember, Message} from "discord.js";
+import {AnyThreadChannel, EmbedBuilder, GuildMember} from "discord.js";
 import SubmissionPayload = Typeings.SubmissionPayload;
 
 @singleton()
@@ -18,7 +18,7 @@ export class SubmissionInfoDispatcher {
     public constructor(private _client: Client) {
     }
 
-    public async postToChannel(payload: SubmissionPayload): Promise<Message | null> {
+    public async postToChannel(payload: SubmissionPayload): Promise<AnyThreadChannel | null> {
         const guild = await this._client.guilds.fetch(this.guildId);
         const channelTOPostTo = await guild.channels.fetch(this.channelToPostId, {
             force: true
@@ -56,8 +56,12 @@ export class SubmissionInfoDispatcher {
                 }
             ]);
         }
-        return channelTOPostTo.send({
+        const msg = await channelTOPostTo.send({
             embeds: [infoEmbed]
+        });
+        return msg.startThread({
+            name: `${payload.wadName} ${payload.wadLevel}`,
+            reason: "started via submissions bot"
         });
     }
 
