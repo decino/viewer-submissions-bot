@@ -29,13 +29,9 @@ export class SubmissionInfoDispatcher {
         const colour = me instanceof GuildMember ? me.displayHexColor : "#0099ff";
         const avatarUrl = me.displayAvatarURL({size: 1024});
         const infoEmbed = new EmbedBuilder()
-            .setTitle("New submission")
+            .setTitle(payload.wadName)
             .setColor(colour)
             .setFields([
-                {
-                    name: "WAD name",
-                    value: payload.wadName
-                },
                 {
                     name: "Map",
                     value: payload.wadLevel
@@ -47,12 +43,7 @@ export class SubmissionInfoDispatcher {
             })
             .setTimestamp();
         if (payload.info) {
-            infoEmbed.addFields([
-                {
-                    name: "info",
-                    value: payload.info
-                }
-            ]);
+            infoEmbed.setDescription(payload.info);
         }
         const msg = await channelTOPostTo.send({
             embeds: [infoEmbed]
