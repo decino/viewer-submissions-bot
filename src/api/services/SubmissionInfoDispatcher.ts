@@ -20,9 +20,7 @@ export class SubmissionInfoDispatcher {
 
     public async postToChannel(payload: SubmissionPayload): Promise<AnyThreadChannel | null> {
         const guild = await this._client.guilds.fetch(this.guildId);
-        const channelTOPostTo = await guild.channels.fetch(this.channelToPostId, {
-            force: true
-        });
+        const channelTOPostTo = await guild.channels.fetch(this.channelToPostId);
         const isText = channelTOPostTo.type === ChannelType.GuildText;
         if (!isText) {
             return null;
