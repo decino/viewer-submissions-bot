@@ -33,7 +33,8 @@ export namespace Typeings {
     export type SubmissionPayload = {
         wadName: string,
         wadLevel: string,
-        info?: string
+        submissionRound: string,
+        info?: string,
     }
 
 }

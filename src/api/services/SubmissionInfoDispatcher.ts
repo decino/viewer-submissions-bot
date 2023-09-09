@@ -35,6 +35,10 @@ export class SubmissionInfoDispatcher {
                 {
                     name: "Map",
                     value: payload.wadLevel
+                },
+                {
+                    name: "Round",
+                    value: payload.submissionRound
                 }
             ])
             .setAuthor({
