@@ -45,7 +45,7 @@ export class SubmissionInfoDispatcher {
                 name: me.displayName,
                 iconURL: avatarUrl
             })
-            .setTimestamp();
+            .setTimestamp(payload.timeStamp);
         if (payload.info) {
             infoEmbed.setDescription(payload.info);
         }

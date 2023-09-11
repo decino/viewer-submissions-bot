@@ -34,6 +34,7 @@ export namespace Typeings {
         wadName: string,
         wadLevel: string,
         submissionRound: string,
+        timeStamp: number,
         info?: string,
     }
 
