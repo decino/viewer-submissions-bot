@@ -9,7 +9,7 @@ import SubmissionPayload = Typeings.SubmissionPayload;
 @singleton()
 export class SubmissionInfoDispatcher {
 
-    @Property("CHANNEL")
+    @Property("SUBMISSION_CHANNEL")
     private channelToPostId: string;
 
     @Property("GUILD")

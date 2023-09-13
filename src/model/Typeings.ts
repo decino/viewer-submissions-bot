@@ -4,8 +4,12 @@ export namespace Typeings {
         TOKEN: string;
         NODE_ENV: "production" | "development";
         API_SERVER_PORT: number;
-        CHANNEL: string;
+        SUBMISSION_CHANNEL: string;
+        PENDING_VALIDATION_CHANNEL: string;
         GUILD: string;
+        WEBAPP_BASEURL: string;
+        WEBAPP_USERNAME: string;
+        PASSWORD: string;
     };
 
     type packageJsonTypes = {
@@ -35,7 +39,15 @@ export namespace Typeings {
         wadLevel: string,
         submissionRound: string,
         timeStamp: number,
-        info?: string,
+        info: string | null
+    }
+
+    export type PendingValidationPayload = {
+        wadName: string,
+        email: string,
+        submitterName: string | null,
+        info: string | null,
+        id: number
     }
 
 }
