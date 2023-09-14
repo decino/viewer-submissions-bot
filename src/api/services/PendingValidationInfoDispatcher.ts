@@ -95,17 +95,32 @@ export class PendingValidationInfoDispatcher {
             try {
                 await collectInteraction.deferUpdate();
                 const buttonId = collectInteraction.customId;
-                switch (buttonId) {
-                    case "delete": {
-                        const ok = await this.deleteSubmission(payload.id);
-                        if (ok) {
-                            await message.delete();
-                        } else {
-                            await collectInteraction.followUp({
-                                content: "Unable to delete"
-                            });
-                        }
-                    }
+
+                let ok = false;
+                let messageStr = "";
+                if (buttonId === "delete") {
+                    ok = await this.deleteSubmission(payload.id);
+                    messageStr = "deleted";
+                } else if (buttonId === "verify") {
+                    ok = await this.verifySubmission(payload.id);
+                    messageStr = "verified";
+                }
+
+                if (ok) {
+                    const followUp = await collectInteraction.followUp({
+                        content: `Submission has been ${messageStr} successfully`
+                    });
+                    await message.delete();
+                    setTimeout(() => {
+                        followUp.delete().catch();
+                    }, 3000);
+                } else {
+                    const followup = await collectInteraction.followUp({
+                        content: "Unable to delete"
+                    });
+                    setTimeout(() => {
+                        followup.delete().catch();
+                    }, 3000);
                 }
             } catch (e) {
                 console.error(e);
@@ -117,6 +132,21 @@ export class PendingValidationInfoDispatcher {
     private async deleteSubmission(id: number): Promise<boolean> {
         const response = await fetch(`${this.webappUrl}/rest/submission/deleteEntries`, {
             method: "DELETE",
+            headers: {
+                "Authorization": this.getAuthHeader(),
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify([id])
+        });
+        if (!response.ok) {
+            console.error(response.statusText);
+        }
+        return response.ok;
+    }
+
+    private async verifySubmission(id: number): Promise<boolean> {
+        const response = await fetch(`${this.webappUrl}/rest/submission/verifyEntries`, {
+            method: "POST",
             headers: {
                 "Authorization": this.getAuthHeader(),
                 'Content-Type': 'application/json'
