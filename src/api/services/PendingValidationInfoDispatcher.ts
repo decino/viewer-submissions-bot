@@ -154,7 +154,7 @@ export class PendingValidationInfoDispatcher {
     }
 
     private getHeaders(): HeadersInit {
-        const Authorization = 'Basic ' + Buffer.from(`${this.username}:${this.password}`).toString('base64');
+        const Authorization = `Basic ${Buffer.from(`${this.username}:${this.password}`).toString('base64')}`;
         return {
             Authorization,
             'Content-Type': 'application/json'
