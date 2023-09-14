@@ -13,7 +13,7 @@ import {
     MessageActionRowComponentBuilder
 } from "discord.js";
 import {ChannelType} from "discord-api-types/v10";
-import fetch from 'node-fetch';
+import fetch, {HeadersInit} from 'node-fetch';
 import PendingValidationPayload = Typeings.PendingValidationPayload;
 
 @singleton()
@@ -116,7 +116,7 @@ export class PendingValidationInfoDispatcher {
                     }, 3000);
                 } else {
                     const followup = await collectInteraction.followUp({
-                        content: "Unable to delete"
+                        content: `Unable to ${buttonId}`
                     });
                     setTimeout(() => {
                         followup.delete().catch();
@@ -132,10 +132,7 @@ export class PendingValidationInfoDispatcher {
     private async deleteSubmission(id: number): Promise<boolean> {
         const response = await fetch(`${this.webappUrl}/rest/submission/deleteEntries`, {
             method: "DELETE",
-            headers: {
-                "Authorization": this.getAuthHeader(),
-                'Content-Type': 'application/json'
-            },
+            headers: this.getHeaders(),
             body: JSON.stringify([id])
         });
         if (!response.ok) {
@@ -147,10 +144,7 @@ export class PendingValidationInfoDispatcher {
     private async verifySubmission(id: number): Promise<boolean> {
         const response = await fetch(`${this.webappUrl}/rest/submission/verifyEntries`, {
             method: "POST",
-            headers: {
-                "Authorization": this.getAuthHeader(),
-                'Content-Type': 'application/json'
-            },
+            headers: this.getHeaders(),
             body: JSON.stringify([id])
         });
         if (!response.ok) {
@@ -159,8 +153,12 @@ export class PendingValidationInfoDispatcher {
         return response.ok;
     }
 
-    private getAuthHeader(): string {
-        return 'Basic ' + Buffer.from(this.username + ':' + this.password).toString('base64');
+    private getHeaders(): HeadersInit {
+        const Authorization = 'Basic ' + Buffer.from(`${this.username}:${this.password}`).toString('base64');
+        return {
+            Authorization,
+            'Content-Type': 'application/json'
+        };
     }
 
 }
