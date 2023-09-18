@@ -65,7 +65,7 @@ export class PendingValidationInfoDispatcher {
             })
             .setTimestamp();
         if (payload.info) {
-            infoEmbed.setDescription(payload.info);
+            infoEmbed.setDescription(payload.info.slice(0, 4096));
         }
         if (payload.submitterName) {
             infoEmbed.addFields([{

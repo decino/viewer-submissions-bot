@@ -47,7 +47,7 @@ export class SubmissionInfoDispatcher {
             })
             .setTimestamp(payload.timeStamp);
         if (payload.info) {
-            infoEmbed.setDescription(payload.info);
+            infoEmbed.setDescription(payload.info.slice(0, 4096));
         }
         const msg = await channelTOPostTo.send({
             embeds: [infoEmbed]
