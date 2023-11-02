@@ -77,14 +77,18 @@ export class PendingValidationInfoDispatcher {
             .setLabel("Verify")
             .setStyle(ButtonStyle.Success)
             .setCustomId("verify");
+        const rejectButton = new ButtonBuilder()
+            .setLabel("Reject")
+            .setStyle(ButtonStyle.Danger)
+            .setCustomId("reject");
         const deleteButton = new ButtonBuilder()
             .setLabel("Delete")
-            .setStyle(ButtonStyle.Danger)
+            .setStyle(ButtonStyle.Secondary)
             .setCustomId("delete");
 
         const buttonRow =
             new ActionRowBuilder<MessageActionRowComponentBuilder>().addComponents(
-                verifyButton, deleteButton
+                verifyButton, rejectButton, deleteButton
             );
         const message = await channelTOPostTo.send({
             embeds: [infoEmbed],
@@ -98,12 +102,20 @@ export class PendingValidationInfoDispatcher {
 
                 let ok = false;
                 let messageStr = "";
-                if (buttonId === "delete") {
-                    ok = await this.deleteSubmission(payload.id);
-                    messageStr = "deleted";
-                } else if (buttonId === "verify") {
-                    ok = await this.verifySubmission(payload.id);
-                    messageStr = "verified";
+
+                switch (buttonId) {
+                    case"reject":
+                        ok = await this.deleteSubmission(payload.id, true);
+                        messageStr = "rejected";
+                        break;
+                    case"delete":
+                        ok = await this.deleteSubmission(payload.id, false);
+                        messageStr = "deleted";
+                        break;
+                    case"verify":
+                        ok = await this.verifySubmission(payload.id);
+                        messageStr = "verified";
+                        break;
                 }
 
                 if (ok) {
@@ -129,8 +141,8 @@ export class PendingValidationInfoDispatcher {
         return message;
     }
 
-    private async deleteSubmission(id: number): Promise<boolean> {
-        const response = await fetch(`${this.webappUrl}/rest/submission/deleteEntries`, {
+    private async deleteSubmission(id: number, notify: boolean): Promise<boolean> {
+        const response = await fetch(`${this.webappUrl}/rest/submission/deleteEntries?notify=${notify}`, {
             method: "DELETE",
             headers: this.getHeaders(),
             body: JSON.stringify([id])
