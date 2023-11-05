@@ -47,7 +47,8 @@ export namespace Typeings {
         email: string,
         submitterName: string | null,
         info: string | null,
-        id: number
+        id: number,
+        map: string
     }
 
 }

@@ -56,6 +56,10 @@ export class PendingValidationInfoDispatcher {
                     value: payload.wadName
                 },
                 {
+                    name: "Map",
+                    value: payload.map
+                },
+                {
                     name: "Email",
                     value: payload.email
                 }
