@@ -1,4 +1,4 @@
-import {ArgsOf, Client, Discord, DIService, On} from "discordx";
+import {type ArgsOf, Client, Discord, DIService, On,} from "discordx";
 import {ActivityType, ChannelType, InteractionType} from "discord-api-types/v10";
 import {container, injectable} from "tsyringe";
 import logger from "../utils/LoggerFactory.js";
@@ -58,6 +58,6 @@ export class OnReady {
     }
 
     private initDi(): void {
-        DIService.allServices;
+        DIService.engine.getAllServices();
     }
 }
