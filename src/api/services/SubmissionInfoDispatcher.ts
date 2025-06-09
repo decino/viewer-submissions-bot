@@ -3,7 +3,15 @@ import {Property} from "../../model/framework/decorators/Property.js";
 import {Typeings} from "../../model/Typeings.js";
 import {Client} from "discordx";
 import {ChannelType} from "discord-api-types/v10";
-import {AnyThreadChannel, EmbedBuilder, GuildMember} from "discord.js";
+import {
+    ActionRowBuilder,
+    AnyThreadChannel,
+    ButtonBuilder,
+    ButtonStyle,
+    EmbedBuilder,
+    GuildMember,
+    MessageActionRowComponentBuilder
+} from "discord.js";
 import SubmissionPayload = Typeings.SubmissionPayload;
 
 @singleton()
@@ -49,9 +57,21 @@ export class SubmissionInfoDispatcher {
         if (payload.info) {
             infoEmbed.setDescription(payload.info.slice(0, 4096));
         }
-        const msg = await channelTOPostTo.send({
-            embeds: [infoEmbed]
-        });
+
+        const messageOptions: Record<string, unknown> = { embeds: [infoEmbed] };
+
+        if (payload.downloadUrl) {
+            const downloadButton = new ButtonBuilder()
+                .setLabel("Download WAD")
+                .setStyle(ButtonStyle.Link)
+                .setURL(payload.downloadUrl);
+            const buttonRow = new ActionRowBuilder<MessageActionRowComponentBuilder>()
+                .addComponents(downloadButton);
+            messageOptions.components = [buttonRow];
+        }
+
+        const msg = await channelTOPostTo.send(messageOptions);
+
         return msg.startThread({
             name: `${payload.wadName} ${payload.wadLevel}`,
             reason: "started via submissions bot"

@@ -35,11 +35,12 @@ export namespace Typeings {
 
 
     export type SubmissionPayload = {
-        wadName: string,
-        wadLevel: string,
-        submissionRound: string,
-        timeStamp: number,
-        info: string | null
+        wadName: string;
+        wadLevel: string;
+        submissionRound: string;
+        timeStamp: number;
+        info: string | null;
+        downloadUrl: string | null;
     }
 
     export type PendingValidationPayload = {
