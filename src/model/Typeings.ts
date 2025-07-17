@@ -1,3 +1,6 @@
+import RECORDED_FORMAT from "./framework/constants/RecordedFormat";
+import DOOM_ENGINE from "./framework/constants/DoomEngine";
+
 export namespace Typeings {
     export type propTypes = envTypes & packageJsonTypes
     export type envTypes = {
@@ -37,10 +40,12 @@ export namespace Typeings {
     export type SubmissionPayload = {
         wadName: string;
         wadLevel: string;
-        submissionRound: string;
         timeStamp: number;
         info: string | null;
         downloadUrl: string | null;
+        recordFormat: RECORDED_FORMAT;
+        mapCompatibility: DOOM_ENGINE;
+        sourcePort: string | null;
     }
 
     export type PendingValidationPayload = {

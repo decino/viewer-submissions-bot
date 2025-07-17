@@ -12,6 +12,7 @@ import {
     GuildMember,
     MessageActionRowComponentBuilder
 } from "discord.js";
+import {parseDoomEngine} from "../../model/framework/constants/DoomEngine.js";
 import SubmissionPayload = Typeings.SubmissionPayload;
 
 @singleton()
@@ -42,11 +43,17 @@ export class SubmissionInfoDispatcher {
             .setFields([
                 {
                     name: "Map",
-                    value: payload.wadLevel
+                    value: payload.wadLevel,
                 },
                 {
-                    name: "Round",
-                    value: payload.submissionRound
+                    name: "Record format",
+                    value: payload.recordFormat,
+                    inline: true
+                },
+                {
+                    name: "Compatibility",
+                    value: parseDoomEngine(payload.mapCompatibility),
+                    inline: true
                 }
             ])
             .setAuthor({
@@ -56,6 +63,16 @@ export class SubmissionInfoDispatcher {
             .setTimestamp(payload.timeStamp);
         if (payload.info) {
             infoEmbed.setDescription(payload.info.slice(0, 4096));
+        }
+
+        if(payload.sourcePort){
+            infoEmbed.addFields([
+                {
+                    name: "Tested on",
+                    value: payload.sourcePort,
+                    inline: true
+                }
+            ])
         }
 
         const messageOptions: Record<string, unknown> = { embeds: [infoEmbed] };
