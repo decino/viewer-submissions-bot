@@ -10,6 +10,7 @@ import {
     ButtonStyle,
     EmbedBuilder,
     GuildMember,
+    type Message,
     MessageActionRowComponentBuilder
 } from "discord.js";
 import {parseDoomEngine} from "../../model/framework/constants/DoomEngine.js";
@@ -93,6 +94,32 @@ export class SubmissionInfoDispatcher {
             name: `${payload.wadName} ${payload.wadLevel}`,
             reason: "started via submissions bot"
         });
+    }
+
+    public async postCongratulations(): Promise<Message>{
+        const guild = await this._client.guilds.fetch(this.guildId);
+        const channelTOPostTo = await guild.channels.fetch(this.channelToPostId);
+        const isText = channelTOPostTo.type === ChannelType.GuildText;
+        if (!isText) {
+            return null;
+        }
+        const me = guild?.members.me;
+        const colour = me instanceof GuildMember ? me.displayHexColor : "#0099ff";
+        const avatarUrl = me.displayAvatarURL({size: 1024});
+
+        const infoEmbed = new EmbedBuilder()
+            .setTitle("Congratulations!")
+            .setColor(colour)
+            .setAuthor({
+                name: me.displayName,
+                iconURL: avatarUrl
+            })
+            .setDescription("You have officially surpassed the number of entries from last round!")
+            .setTimestamp();
+
+        const messageOptions: Record<string, unknown> = { embeds: [infoEmbed] };
+
+        return channelTOPostTo.send(messageOptions);
     }
 
 }

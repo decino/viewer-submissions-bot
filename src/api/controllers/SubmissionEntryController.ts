@@ -53,4 +53,18 @@ export class SubmissionEntryController extends BaseController {
             return super.doError(res, e.message, StatusCodes.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @Post(`congratulations`)
+    private async postCongratulations(req: Request, res: Response): Promise<Response> {
+        try {
+            const result = await this._submissionInfoDispatcher.postCongratulations();
+            return super.ok(res, {
+                success: `sent`,
+                messageId: result.id
+            });
+        } catch (e) {
+            logger.warn(e.message);
+            return super.doError(res, e.message, StatusCodes.INTERNAL_SERVER_ERROR);
+        }
+    }
 }
